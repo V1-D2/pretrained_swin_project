@@ -55,6 +55,8 @@ class TemperatureDataset(Dataset):
         print(f"Preprocessing {n_samples} samples...")
         valid_samples = 0
 
+        rejected_reasons = {"too_small": 0, "nan_mean": 0, "no_variance": 0}
+
         for i in range(len(self.swaths)):
             if valid_samples >= n_samples:
                 break
@@ -62,13 +64,17 @@ class TemperatureDataset(Dataset):
             swath = self.swaths[i]
             temp = swath['temperature'].astype(np.float32)
 
-            # Пропускаем слишком маленькие изображения
+            print(f"Sample {i}: shape={temp.shape}")  # Debug line
+
+            # Check size requirements
             if self.full_size_val:
-                min_size = 200  # Минимальный размер для валидации
+                min_size = 200
             else:
                 min_size = max(patch_height, patch_width)
 
             if temp.shape[0] < min_size or temp.shape[1] < min_size:
+                rejected_reasons["too_small"] += 1
+                print(f"  Rejected: too small ({temp.shape} < {min_size})")  # Debug line
                 continue
 
             # Удаляем NaN
