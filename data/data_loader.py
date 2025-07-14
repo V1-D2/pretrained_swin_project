@@ -210,8 +210,8 @@ class TemperatureDataset(Dataset):
 def create_train_val_dataloaders(train_files: List[str], val_file: str,
                                  batch_size: int = 4, scale_factor: int = 4,
                                  patch_height: int = 800, patch_width: int = 192,
-                                 val_samples: int = 10,
-                                 train_samples_per_file: int = 3000) -> Tuple[DataLoader, DataLoader]:
+                                 val_samples: int = None,
+                                 train_samples_per_file: int = None) -> Tuple[DataLoader, DataLoader]:
     """Создание train и validation датлоадеров"""
 
     # Training datasets - загружаем последовательно для экономии памяти

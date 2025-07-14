@@ -301,13 +301,23 @@ def main(args):
     print(f"Using device: {device}")
 
     # Создаем датасеты
-    train_files = [
-        os.path.join(args.data_dir, f'temperature_data_{i}.npz')
-        for i in range(1, 4)  # Используем файлы 1-3 для обучения
-    ]
-    val_file = os.path.join(args.data_dir, 'temperature_data_4.npz')  # Файл 4 для валидации
+    import glob
+    all_npz_files = glob.glob(os.path.join(args.data_dir, '*.npz'))
+    all_npz_files.sort()  # Sort for consistent ordering
 
+    if len(all_npz_files) < 2:
+        raise FileNotFoundError(
+            f"Need at least 2 NPZ files for training and validation. Found {len(all_npz_files)} in {args.data_dir}")
+
+    # Use all but the last file for training, last file for validation
+    train_files = all_npz_files[:-1]
+    val_file = all_npz_files[-1]
+
+    print(f"Found {len(all_npz_files)} NPZ files:")
+    print(f"Training files: {[os.path.basename(f) for f in train_files]}")
+    print(f"Validation file: {os.path.basename(val_file)}")
     print("Creating data loaders...")
+
     train_loader, val_loader = create_train_val_dataloaders(
         train_files,
         val_file,
