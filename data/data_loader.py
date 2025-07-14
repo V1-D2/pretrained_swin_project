@@ -72,9 +72,9 @@ class TemperatureDataset(Dataset):
             else:
                 min_size = max(patch_height, patch_width)
 
-            if temp.shape[0] < min_size or temp.shape[1] < min_size:
+            if temp.shape[0] < patch_height or temp.shape[1] < patch_width:
                 rejected_reasons["too_small"] += 1
-                print(f"  Rejected: too small ({temp.shape} < {min_size})")  # Debug line
+                print(f"  Rejected: too small ({temp.shape} < ({patch_height}, {patch_width})")  # Debug line
                 continue
 
             # Удаляем NaN
