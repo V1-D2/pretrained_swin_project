@@ -79,7 +79,7 @@ apptainer exec --nv \
     --bind $DATA_DIR:$DATA_DIR \
     --env PYTHONPATH=$PROJECT_DIR:$PYTHONPATH \
     /home/shared/containers/tensorflow-25.02-py3.sif \
-    python train_pretrained_swin.py \
+    python train_temperature_sr.py \
     --data_dir $DATA_DIR \
     --output_dir $PROJECT_DIR/experiments/pretrained_swin_x4 \
     --pretrained $PRETRAINED_DIR/003_realSR_BSRGAN_DFO_s64w8_SwinIR-M_x4_PSNR.pth \
